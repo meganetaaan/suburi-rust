@@ -1,0 +1,11 @@
+{
+  "name": "rust-in-node",
+  "version": "0.1.0",
+  "description": "rust in node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shinya Ishikawa",
+  "license": "ISC"
+}
