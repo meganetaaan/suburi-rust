@@ -1,6 +1,6 @@
 use std::thread;
 
-#[no_mungle]
+#[no_mangle]
 pub extern "C" fn process() {
     let handles: Vec<_> = (0..10)
         .map(|_| {
