@@ -1,0 +1,6 @@
+[package]
+name = "casting"
+version = "0.1.0"
+authors = ["meganetaaan <ishikawa.s.1027@gmail.com>"]
+
+[dependencies]
