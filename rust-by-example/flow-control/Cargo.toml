@@ -1,0 +1,6 @@
+[package]
+name = "flow-control"
+version = "0.1.0"
+authors = ["Shinya Ishikawa <ishikawa.s.1027@gmail.com>"]
+
+[dependencies]
