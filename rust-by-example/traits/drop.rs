@@ -1,0 +1,34 @@
+struct Droppable {
+    name: &'static str,
+}
+
+impl Drop for Droppable {
+    fn drop(&mut self) {
+        println!("> Dropping {}", self.name);
+    }
+}
+
+fn main() {
+    let _a = Droppable { name: "a" };
+
+    // block A
+    {
+        let _b = Droppable { name: "b" };
+
+        // block B
+        {
+            let _c = Droppable { name: "c" };
+            let _d = Droppable { name: "d" };
+
+            println!("Exiting block B");
+        }
+        println!("Just Exited block B");
+
+        println!("Exiting block A");
+    }
+    println!("Just Exited block A");
+
+    drop(_a);
+
+    println!("end of the main function");
+}
