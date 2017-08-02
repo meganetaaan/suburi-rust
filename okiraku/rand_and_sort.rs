@@ -90,6 +90,50 @@ fn quick_sort<T: Ord + Copy>(buff: &mut [T]) {
     if j < buff.len() - 1 { quick_sort(&mut buff[j + 1 ..]); }
 }
 
+const LIMIT: usize = 16;
+
+fn select_pivot<T: Ord + Copy>(buff: &[T]) -> T {
+    let a = buff[0];
+    let b = buff[buff.len() / 2];
+    let c = buff[buff.len() - 1];
+    if a < b {
+        if b < c {  
+            b // a < b < c
+        } else if a < c {
+            c // a < c < b
+        } else {
+            a // c < a < b
+        }
+    } else {
+        if a < c {
+            a // b < a < c
+        } else if b < c {
+            c // b < c < a
+        } else {
+            b // c < b < a
+        }
+    }
+}
+
+fn quick_sort1<T: Ord + Copy>(buff: &mut[T]) {
+    if buff.len() <= LIMIT {
+        insert_sort1(buff);
+        return;
+    }
+    let pivot = select_pivot(buff);
+    let mut i = 0;
+    let mut j = buff.len() - 1;
+    loop {
+        while pivot > buff[i] { i += 1; }
+        while pivot < buff[j] { j -= 1; }
+        if i >= j { break; }
+        buff.swap(i, j);
+        i += 1;
+        j -= 1;
+    }
+    if i > 0 { quick_sort1(&mut buff[..i]); }
+    if j < buff.len() - 1 { quick_sort1(&mut buff[j + 1 ..]); }
+}
 
 fn test(func: fn(&mut [i32]) -> (), rng: &mut Rand) {
     let mut buff: [i32; 20] = [0; 20];
@@ -118,4 +162,6 @@ fn main() {
     test(insert_sort1, &mut rng);
     println!("----- quick sort -----");
     test(quick_sort, &mut rng);
+    println!("----- quick sort 1 -----");
+    test(quick_sort1, &mut rng);
 }
