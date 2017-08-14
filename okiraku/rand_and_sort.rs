@@ -135,6 +135,39 @@ fn quick_sort1<T: Ord + Copy>(buff: &mut[T]) {
     if j < buff.len() - 1 { quick_sort1(&mut buff[j + 1 ..]); }
 }
 
+fn merge_sort<T: Ord + Copy>(buff: &mut [T]) {
+    if buff.len() < 2 {
+        return;
+    } else if buff.len() == 2 {
+        if buff[0] > buff[1] { buff.swap(0, 1); }
+    } else {
+        let mid = buff.len() / 2;
+        merge_sort(&mut buff[.. mid]);
+        merge_sort(&mut buff[mid ..]);
+        // 前半部分をWorkに対比
+        let mut work: Vec<T> = Vec::with_capacity(mid);
+        for i in 0 .. mid { work.push(buff[i]); }
+        let mut i = 0;
+        let mut j = mid;
+        let mut k = 0;
+        while i < mid && j < buff.len() {
+            if work[i] <= buff[j] {
+                buff[k] = work[i];
+                i += 1;
+            } else {
+                buff[k] = buff[j];
+                j += 1;
+            }
+            k += 1;
+        }
+        while i < mid {
+            buff[k] = work[i];
+            i += 1;
+            k += 1;
+        }
+    }
+}
+
 fn test(func: fn(&mut [i32]) -> (), rng: &mut Rand) {
     let mut buff: [i32; 20] = [0; 20];
     for i in 0 .. 20 { buff[i] = i as i32; }
@@ -164,4 +197,6 @@ fn main() {
     test(quick_sort, &mut rng);
     println!("----- quick sort 1 -----");
     test(quick_sort1, &mut rng);
+    println!("----- merge sort -----");
+    test(merge_sort, &mut rng);
 }
