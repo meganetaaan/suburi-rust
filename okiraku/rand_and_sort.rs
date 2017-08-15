@@ -168,6 +168,41 @@ fn merge_sort<T: Ord + Copy>(buff: &mut [T]) {
     }
 }
 
+fn heap_sort<T: Ord + Copy>(buff: &mut [T]) {
+    let mut i = buff.len() / 2;
+    while i > 0 {
+        let mut n = i - 1;
+        let x = buff[n];
+        loop {
+            let mut c = 2 * n + 1;
+            if c >= buff.len() { break; }
+            if c + 1 < buff.len() && buff[c] < buff[c + 1] { c += 1; }
+            if x >= buff[c] { break; }
+            buff[n] = buff[c];
+            n = c;
+        }
+        buff[n] = x;
+        i -= 1;
+    }
+    // 最大値を取り出す
+    i = buff.len();
+    while i > 0 {
+        let x = buff[i - 1];
+        buff[i - 1] = buff[0];
+        let mut n = 0;
+        loop {
+            let mut c = 2 * n + 1;
+            if c >= i - 1 { break; }
+            if c + 1 < i - 1 && buff[c] < buff[c + 1] { c += 1; }
+            if x >= buff[c] { break; }
+            buff[n] = buff[c];
+            n = c;
+        }
+        buff[n] = x;
+        i -= 1;
+    }
+}
+
 fn test(func: fn(&mut [i32]) -> (), rng: &mut Rand) {
     let mut buff: [i32; 20] = [0; 20];
     for i in 0 .. 20 { buff[i] = i as i32; }
@@ -199,4 +234,6 @@ fn main() {
     test(quick_sort1, &mut rng);
     println!("----- merge sort -----");
     test(merge_sort, &mut rng);
+    println!("----- heap sort -----");
+    test(heap_sort, &mut rng);
 }
