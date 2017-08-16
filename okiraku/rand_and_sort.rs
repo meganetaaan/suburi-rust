@@ -1,12 +1,12 @@
 struct Rand {
-    seed: u32
+    seed: u32,
 }
 
 const RAND_MAX: u32 = 0xffff_ffff;
 
 impl Rand {
     fn new(x: u32) -> Rand {
-        Rand {seed: x}
+        Rand { seed: x }
     }
 
     fn rand(&mut self) -> u32 {
@@ -20,7 +20,7 @@ impl Rand {
     }
 
     fn shuffle<T>(&mut self, buff: &mut [T]) {
-        for i in 0 .. buff.len() {
+        for i in 0..buff.len() {
             let j = (self.random() * buff.len() as f64) as usize;
             buff.swap(i, j);
         }
@@ -28,7 +28,7 @@ impl Rand {
 }
 
 fn bubble_sort<T: Ord>(buff: &mut [T]) {
-    for i in 0 .. buff.len() {
+    for i in 0..buff.len() {
         let mut j = buff.len() - 1;
         while j > i {
             if buff[j] < buff[j - 1] {
@@ -40,9 +40,9 @@ fn bubble_sort<T: Ord>(buff: &mut [T]) {
 }
 
 fn select_sort<T: Ord>(buff: &mut [T]) {
-    for i in 0 .. buff.len() - 1{
+    for i in 0..buff.len() - 1 {
         let mut n = i;
-        for j in i + 1 .. buff.len() {
+        for j in i + 1..buff.len() {
             if buff[j] < buff[n] {
                 n = j;
             }
@@ -52,7 +52,7 @@ fn select_sort<T: Ord>(buff: &mut [T]) {
 }
 
 fn insert_sort<T: Ord>(buff: &mut [T]) {
-    for i in 1 .. buff.len() {
+    for i in 1..buff.len() {
         let mut j = i;
         while j > 0 && buff[j] < buff[j - 1] {
             buff.swap(j, j - 1);
@@ -62,7 +62,7 @@ fn insert_sort<T: Ord>(buff: &mut [T]) {
 }
 
 fn insert_sort1<T: Ord + Copy>(buff: &mut [T]) {
-    for i in 1 .. buff.len() {
+    for i in 1..buff.len() {
         let mut j = i;
         let temp = buff[i];
         while j > 0 && temp < buff[j - 1] {
@@ -74,20 +74,32 @@ fn insert_sort1<T: Ord + Copy>(buff: &mut [T]) {
 }
 
 fn quick_sort<T: Ord + Copy>(buff: &mut [T]) {
-    if buff.len() < 2 { return; }
+    if buff.len() < 2 {
+        return;
+    }
     let pivot = buff[buff.len() / 2];
     let mut i = 0;
     let mut j = buff.len() - 1;
     loop {
-        while pivot > buff[i] { i += 1; }
-        while pivot < buff[j] { j -= 1; }
-        if i >= j { break; }
+        while pivot > buff[i] {
+            i += 1;
+        }
+        while pivot < buff[j] {
+            j -= 1;
+        }
+        if i >= j {
+            break;
+        }
         buff.swap(i, j);
         i += 1;
         j -= 1;
     }
-    if i > 0 { quick_sort(&mut buff[.. i]); }
-    if j < buff.len() - 1 { quick_sort(&mut buff[j + 1 ..]); }
+    if i > 0 {
+        quick_sort(&mut buff[..i]);
+    }
+    if j < buff.len() - 1 {
+        quick_sort(&mut buff[j + 1..]);
+    }
 }
 
 const LIMIT: usize = 16;
@@ -97,7 +109,7 @@ fn select_pivot<T: Ord + Copy>(buff: &[T]) -> T {
     let b = buff[buff.len() / 2];
     let c = buff[buff.len() - 1];
     if a < b {
-        if b < c {  
+        if b < c {
             b // a < b < c
         } else if a < c {
             c // a < c < b
@@ -115,7 +127,7 @@ fn select_pivot<T: Ord + Copy>(buff: &[T]) -> T {
     }
 }
 
-fn quick_sort1<T: Ord + Copy>(buff: &mut[T]) {
+fn quick_sort1<T: Ord + Copy>(buff: &mut [T]) {
     if buff.len() <= LIMIT {
         insert_sort1(buff);
         return;
@@ -124,29 +136,43 @@ fn quick_sort1<T: Ord + Copy>(buff: &mut[T]) {
     let mut i = 0;
     let mut j = buff.len() - 1;
     loop {
-        while pivot > buff[i] { i += 1; }
-        while pivot < buff[j] { j -= 1; }
-        if i >= j { break; }
+        while pivot > buff[i] {
+            i += 1;
+        }
+        while pivot < buff[j] {
+            j -= 1;
+        }
+        if i >= j {
+            break;
+        }
         buff.swap(i, j);
         i += 1;
         j -= 1;
     }
-    if i > 0 { quick_sort1(&mut buff[..i]); }
-    if j < buff.len() - 1 { quick_sort1(&mut buff[j + 1 ..]); }
+    if i > 0 {
+        quick_sort1(&mut buff[..i]);
+    }
+    if j < buff.len() - 1 {
+        quick_sort1(&mut buff[j + 1..]);
+    }
 }
 
 fn merge_sort<T: Ord + Copy>(buff: &mut [T]) {
     if buff.len() < 2 {
         return;
     } else if buff.len() == 2 {
-        if buff[0] > buff[1] { buff.swap(0, 1); }
+        if buff[0] > buff[1] {
+            buff.swap(0, 1);
+        }
     } else {
         let mid = buff.len() / 2;
-        merge_sort(&mut buff[.. mid]);
-        merge_sort(&mut buff[mid ..]);
+        merge_sort(&mut buff[..mid]);
+        merge_sort(&mut buff[mid..]);
         // 前半部分をWorkに対比
         let mut work: Vec<T> = Vec::with_capacity(mid);
-        for i in 0 .. mid { work.push(buff[i]); }
+        for i in 0..mid {
+            work.push(buff[i]);
+        }
         let mut i = 0;
         let mut j = mid;
         let mut k = 0;
@@ -175,9 +201,15 @@ fn heap_sort<T: Ord + Copy>(buff: &mut [T]) {
         let x = buff[n];
         loop {
             let mut c = 2 * n + 1;
-            if c >= buff.len() { break; }
-            if c + 1 < buff.len() && buff[c] < buff[c + 1] { c += 1; }
-            if x >= buff[c] { break; }
+            if c >= buff.len() {
+                break;
+            }
+            if c + 1 < buff.len() && buff[c] < buff[c + 1] {
+                c += 1;
+            }
+            if x >= buff[c] {
+                break;
+            }
             buff[n] = buff[c];
             n = c;
         }
@@ -192,9 +224,15 @@ fn heap_sort<T: Ord + Copy>(buff: &mut [T]) {
         let mut n = 0;
         loop {
             let mut c = 2 * n + 1;
-            if c >= i - 1 { break; }
-            if c + 1 < i - 1 && buff[c] < buff[c + 1] { c += 1; }
-            if x >= buff[c] { break; }
+            if c >= i - 1 {
+                break;
+            }
+            if c + 1 < i - 1 && buff[c] < buff[c + 1] {
+                c += 1;
+            }
+            if x >= buff[c] {
+                break;
+            }
             buff[n] = buff[c];
             n = c;
         }
@@ -205,7 +243,9 @@ fn heap_sort<T: Ord + Copy>(buff: &mut [T]) {
 
 fn test(func: fn(&mut [i32]) -> (), rng: &mut Rand) {
     let mut buff: [i32; 20] = [0; 20];
-    for i in 0 .. 20 { buff[i] = i as i32; }
+    for i in 0..20 {
+        buff[i] = i as i32;
+    }
     rng.shuffle(&mut buff);
     println!("{:?}", buff);
     func(&mut buff);
